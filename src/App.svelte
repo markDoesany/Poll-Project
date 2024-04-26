@@ -1,46 +1,33 @@
 <script>
-  let people = [
-    {
-      fullname: 'Sophia Lorraine Tecson',
-      age: 22,
-      status: 'single',
-      id:0
-    },
-    {
-      fullname: 'Mark Teofel Cernal ',
-      age: 23,
-      status: 'single',
-      id:1
-    },
-    {
-      fullname: 'Kabit ni Sophia',
-      age: 22,
-      status: 'single',
-      id:2
-    }
-  ]
+  import Header from "./components/Header.svelte";
+  import Footer from "./components/Footer.svelte";
+  import PollList from "./components/PollList.svelte";
+  import Tabs from "./shared/Tabs.svelte"
+  import CreatePollForm from "./components/CreatePollForm.svelte";
 
-  const handleClick = (id) =>{ 
-    people = people.filter((person) => person.id != id)
-  }
+  let items = ["Current Polls", "Add New Poll"]
+  let activeItem  = "Current Polls"
+  
+  const tabchange = (event) => activeItem = event.detail
 
+  const handleAdd = () => activeItem = 'Current Polls'
+  
 </script>
 
+<Header/>
 <main>
-  {#each people as person (person.id)}
-    <div>
-      <h3>{person.fullname}</h3>
-      <p>{person.age} years old</p>
-      <p>{person.status}</p>
-      <button on:click={() => handleClick(person.id)}>Delete</button>
-    </div>
-  {:else}
-    <p>No person here</p>
-  {/each}
-  <div>
-  </div>
+  <Tabs {items} {activeItem}  on:tabchange={tabchange}/>
+  {#if activeItem === "Current Polls"}
+    <PollList/>
+  {:else if activeItem === "Add New Poll"}
+      <CreatePollForm on:add={handleAdd}/>
+  {/if}
 </main>
 
+<Footer/>
 <style>
-
+  main{
+    max-width: 960px;
+    margin: 40px auto;
+  }
 </style>
